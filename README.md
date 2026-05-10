@@ -1,3 +1,5 @@
+<img width="200" height="200" alt="J2MEBuilder" src="https://github.com/user-attachments/assets/76c9d943-83dc-4835-b716-5b9011059aeb" />
+
 # 📱 J2ME Builder
 
 > **Релиз исходного кода** | Версия: 1.0.0.0 | Лицензия: MIT  
