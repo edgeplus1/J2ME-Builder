@@ -414,7 +414,6 @@ build/Release/v1.0.0/
  │   │       └── 📄 MyApp_v1.0.0.jad
  │   └── 📁 Debug/
  │
- ├── 📄 build40.bat                       # Маркер проекта (ОПЦИОНАЛЬНО)
  ├── 📁 .vscode/                          # Настройки редактора
  │   └── 📄 settings.json
  ├── 📄 README.md
