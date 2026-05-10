@@ -1,0 +1,14 @@
+Found controller: RGB Keyboard
+Found controller: RGB Keyboard
+Found controller: RGB Keyboard
+KEmulator nnmod 2.19.1 Running on Windows 10 x86 (10.0), Java: 1.8.0_202 (Oracle Corporation)
+Get classes from D:\Рабочий стол\NokiaApps\build\EdgeTools.jar
+Get class com.edgetools.EdgeTools
+Custom.jar.getResourceStream:  (null)
+[MEDIA] LibVlc not loaded
+Launch MIDlet class: com.edgetools.EdgeTools
+Right command: Back
+Left command: Calculate
+Left command: Calculate
+Right command: Back
+Right command: Back
