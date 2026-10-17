@@ -169,7 +169,7 @@ namespace J2MEBuilder
                                     version_label.Text = $"Последняя версия: {latestVersion}";
                                 }
                                 richTextBox1.Text = latestRelease["body"]?.ToString();
-                                buttonInstallUpdate.Enabled = true;
+                                button2.Enabled = true;
                                 return;
                             }
                             else
@@ -184,7 +184,7 @@ namespace J2MEBuilder
                                     MessageBox.Show("Обновления не найдены!", "Проверить обновления", MessageBoxButtons.OK, MessageBoxIcon.Information);
                                     version_label.Text = "Версия: " + Assembly.GetExecutingAssembly().GetName().Version.ToString();
                                 }
-                                buttonInstallUpdate.Enabled = false;
+                                button2.Enabled = false;
                                 return;
                             }
                         }

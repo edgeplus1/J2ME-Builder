@@ -31,7 +31,36 @@ namespace J2MEBuilder
         private void Form1_Load(object sender, EventArgs e)
         {
             LoadRecentProjects();
+            CleanupInvalidProjects(); // Очищаем невалидные проекты при запуске
             UpdateListBox();
+        }
+
+        /// <summary>
+        /// Автоматически удаляет из списка проекты, которые больше не существуют 
+        /// или не являются валидными J2ME проектами (включая C:\).
+        /// </summary>
+        private void CleanupInvalidProjects()
+        {
+            var validProjects = new List<string>();
+            bool changed = false;
+
+            foreach (var path in recentProjects)
+            {
+                if (Directory.Exists(path) && IsJ2MEProject(path))
+                {
+                    validProjects.Add(path);
+                }
+                else
+                {
+                    changed = true; // Были удалены невалидные записи
+                }
+            }
+
+            if (changed)
+            {
+                recentProjects = validProjects;
+                SaveRecentProjects();
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -92,7 +121,6 @@ namespace J2MEBuilder
                 return;
             }
 
-            // Извлекаем путь из строки "ProjectName - C:\path\to\project"
             string selectedText = listBox1.SelectedItem.ToString();
             string projectPath = ExtractPathFromListBoxItem(selectedText);
 
@@ -107,7 +135,8 @@ namespace J2MEBuilder
                 if (result == DialogResult.Yes)
                 {
                     RemoveFromRecentProjects(projectPath);
-                    UpdateListBox();
+                    if (listBox1.Items.Count > 0)
+                        listBox1.SelectedIndex = 0;
                 }
                 return;
             }
@@ -117,7 +146,8 @@ namespace J2MEBuilder
                 MessageBox.Show("Выбранная папка больше не является J2ME проектом.",
                     "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 RemoveFromRecentProjects(projectPath);
-                UpdateListBox();
+                if (listBox1.Items.Count > 0)
+                    listBox1.SelectedIndex = 0;
                 return;
             }
 
@@ -172,18 +202,72 @@ namespace J2MEBuilder
             return itemText;
         }
 
+        /// <summary>
+        /// БЕЗОПАСНАЯ проверка на J2ME проект. 
+        /// Больше не вызывает ошибок доступа к системным папкам.
+        /// </summary>
         private bool IsJ2MEProject(string path)
         {
-            bool hasSrc = Directory.Exists(Path.Combine(path, "src"));
-            bool hasJavaFiles = Directory.GetFiles(path, "*.java", SearchOption.AllDirectories).Length > 0;
-            bool hasLib = Directory.Exists(Path.Combine(path, "lib"));
-            bool hasBuildScript = File.Exists(Path.Combine(path, "build40.bat"));
+            try
+            {
+                if (string.IsNullOrWhiteSpace(path))
+                    return false;
 
-            if (hasSrc && hasJavaFiles) return true;
-            if (hasBuildScript) return true;
-            if (hasLib && hasSrc) return true;
+                // 1. Запрещаем выбор корневых дисков (C:\, D:\ и т.д.)
+                if (Path.GetPathRoot(path).Equals(path, StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
 
-            return false;
+                bool hasSrc = Directory.Exists(Path.Combine(path, "src"));
+                bool hasLib = Directory.Exists(Path.Combine(path, "lib"));
+                bool hasBuildScript = File.Exists(Path.Combine(path, "build40.bat"));
+
+                // 2. Безопасный поиск java файлов
+                bool hasJavaFiles = false;
+
+                // Сначала ищем в папке src (стандарт для J2ME)
+                if (hasSrc)
+                {
+                    try
+                    {
+                        hasJavaFiles = Directory.GetFiles(Path.Combine(path, "src"), "*.java", SearchOption.AllDirectories).Length > 0;
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                        // Игнорируем ошибки доступа внутри папок проекта
+                    }
+                }
+
+                // Если в src не нашли, ищем в корне выбранной папки (но только верхний уровень, чтобы не сканировать весь диск)
+                if (!hasJavaFiles)
+                {
+                    try
+                    {
+                        hasJavaFiles = Directory.GetFiles(path, "*.java", SearchOption.TopDirectoryOnly).Length > 0;
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                        // Игнорируем
+                    }
+                }
+
+                // Логика валидации
+                if (hasSrc && hasJavaFiles) return true;
+                if (hasBuildScript) return true;
+                if (hasLib && hasSrc) return true;
+
+                return false;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                // Если нет доступа к самой папке, это точно не наш проект
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         private void OpenProjectInVSCode(string projectPath)
@@ -260,8 +344,10 @@ namespace J2MEBuilder
 
         private void AddToRecentProjects(string projectPath)
         {
-            recentProjects.Remove(projectPath);
-            recentProjects.Insert(0, projectPath);
+            string normalizedPath = projectPath.TrimEnd('\\', '/');
+
+            recentProjects.RemoveAll(p => p.TrimEnd('\\', '/').Equals(normalizedPath, StringComparison.OrdinalIgnoreCase));
+            recentProjects.Insert(0, normalizedPath);
 
             while (recentProjects.Count > MaxRecentProjects)
             {
@@ -274,7 +360,9 @@ namespace J2MEBuilder
 
         private void RemoveFromRecentProjects(string projectPath)
         {
-            recentProjects.Remove(projectPath);
+            string target = projectPath.TrimEnd('\\', '/');
+            recentProjects.RemoveAll(p => p.TrimEnd('\\', '/').Equals(target, StringComparison.OrdinalIgnoreCase));
+
             SaveRecentProjects();
             UpdateListBox();
         }
@@ -287,7 +375,7 @@ namespace J2MEBuilder
             {
                 if (Directory.Exists(path))
                 {
-                    string projectName = Path.GetFileName(path);
+                    string projectName = Path.GetFileName(path.TrimEnd('\\', '/'));
                     listBox1.Items.Add($"{projectName} - {path}");
                 }
             }
@@ -310,6 +398,16 @@ namespace J2MEBuilder
         {
             Form5 downloading = new Form5();
             downloading.ShowDialog();
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+            // Пустой обработчик, оставлен для совместимости с дизайнером форм
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

@@ -15,6 +15,7 @@ namespace J2MEBuilder
         private readonly string resPath = Path.Combine(Application.StartupPath, "res");
         private string projectPath = "";
         private string iconPath = "";
+        private string manualJdkPath = ""; // Для ручного указания пути к JDK
 
         public Form2()
         {
@@ -75,6 +76,21 @@ namespace J2MEBuilder
             }
         }
 
+        // НОВЫЙ МЕТОД: Ручной выбор папки JDK
+        private void buttonBrowseJdk_Click(object sender, EventArgs e)
+        {
+            using (var fbd = new FolderBrowserDialog())
+            {
+                fbd.Description = "Выберите корневую папку JDK 8 (должна содержать папку 'bin' с 'javac.exe')";
+                if (fbd.ShowDialog() == DialogResult.OK)
+                {
+                    manualJdkPath = fbd.SelectedPath;
+                    // Убедитесь, что вы добавили textBoxJdkPath на форму в дизайнере
+                    textBoxJdkPath.Text = manualJdkPath;
+                }
+            }
+        }
+
         private async void button3_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(projectPath))
@@ -91,6 +107,12 @@ namespace J2MEBuilder
             string version = textBox2.Text.Trim();
             string vendor = textBox4.Text.Trim();
             string releaseType = comboBox1.SelectedItem.ToString();
+
+            // Читаем ручной путь к JDK, если он указан в UI
+            if (textBoxJdkPath != null && !string.IsNullOrWhiteSpace(textBoxJdkPath.Text))
+            {
+                manualJdkPath = textBoxJdkPath.Text.Trim();
+            }
 
             button3.Enabled = false;
             SetProgress(0);
@@ -116,9 +138,10 @@ namespace J2MEBuilder
             {
                 SetProgress(5);
                 Log("[1/6] Поиск JDK 8...");
+
                 string jdkPath = FindJDK8();
                 if (string.IsNullOrEmpty(jdkPath))
-                    throw new Exception("JDK 8 не найден! Проверьте установку.");
+                    throw new Exception("JDK 8 не найден!\n\n1. Убедитесь, что JDK 8 установлен.\n2. Укажите путь к нему вручную в поле 'JDK Path'.\n3. Проверьте переменную окружения JAVA_HOME.");
 
                 string javacPath = Path.Combine(jdkPath, "bin", "javac.exe");
                 string jarPath = Path.Combine(jdkPath, "bin", "jar.exe");
@@ -176,7 +199,8 @@ namespace J2MEBuilder
                 {
                     Log($"    {Path.GetFileName(f)}");
                     string error;
-                    string args = $"-bootclasspath {bootClassPath} {userClasspathArg} -d \"{classesPath}\" -encoding UTF-8 -source 1.3 -target 1.1 -g:none \"{f}\"";
+                    // ИЗМЕНЕНИЕ: -target 1.3 вместо 1.1 для совместимости с современными сборками OpenJDK 8
+                    string args = $"-bootclasspath {bootClassPath} {userClasspathArg} -d \"{classesPath}\" -encoding UTF-8 -source 1.3 -target 1.3 -g:none \"{f}\"";
 
                     int code = RunProcessSync(javacPath, args, out error);
                     if (code != 0) throw new Exception($"Ошибка компиляции:\n{error}");
@@ -365,17 +389,67 @@ namespace J2MEBuilder
 
         private string FindJDK8()
         {
-            string[] bases = { @"C:\Program Files\Java", @"C:\Program Files (x86)\Java" };
+            // 1. Приоритет: ручной путь, указанный пользователем
+            if (!string.IsNullOrEmpty(manualJdkPath) && File.Exists(Path.Combine(manualJdkPath, "bin", "javac.exe")))
+            {
+                return manualJdkPath;
+            }
+
+            // 2. Проверка переменной окружения JAVA_HOME (стандарт для разработчиков)
+            string javaHome = Environment.GetEnvironmentVariable("JAVA_HOME");
+            if (!string.IsNullOrEmpty(javaHome))
+            {
+                javaHome = javaHome.Trim(' ', '"');
+                if (Directory.Exists(javaHome) && File.Exists(Path.Combine(javaHome, "bin", "javac.exe")))
+                {
+                    return javaHome;
+                }
+            }
+
+            
+            string[] bases = {
+                @"C:\Program Files\Java",
+                @"C:\Program Files (x86)\Java",
+                @"C:\Program Files\ojdkbuild",
+                @"C:\Program Files\Eclipse Foundation",
+                @"C:\Program Files\Zulu",
+                @"C:\Program Files\Adoptium",
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Programs", "ojdkbuild") // Для установок "только для текущего пользователя"
+            };
+
+            
+            string[] patterns = {
+                "jdk1.8*",
+                "jdk-8*",
+                "java-1.8*",
+                "jdk8*"
+            };
+
             foreach (var b in bases)
             {
                 if (Directory.Exists(b))
                 {
-                    var dirs = Directory.GetDirectories(b, "jdk1.8*")
-                              .Concat(Directory.GetDirectories(b, "jdk-8*"));
-                    foreach (var d in dirs)
-                        if (File.Exists(Path.Combine(d, "bin", "javac.exe"))) return d;
+                    foreach (var pattern in patterns)
+                    {
+                        try
+                        {
+                            var dirs = Directory.GetDirectories(b, pattern);
+                            foreach (var d in dirs)
+                            {
+                                if (File.Exists(Path.Combine(d, "bin", "javac.exe")))
+                                {
+                                    return d;
+                                }
+                            }
+                        }
+                        catch (UnauthorizedAccessException)
+                        {
+                            // Игнорируем папки, к которым нет доступа, и идем дальше
+                        }
+                    }
                 }
             }
+
             return null;
         }
 
@@ -383,6 +457,8 @@ namespace J2MEBuilder
         {
             string srcPath = Path.Combine(projectPath, "src");
             if (!Directory.Exists(srcPath)) return;
+
+            // Здесь можно добавить логику парсинга имени приложения из исходников, если нужно
         }
         #endregion
 

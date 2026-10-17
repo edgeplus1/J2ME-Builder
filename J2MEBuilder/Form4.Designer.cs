@@ -136,7 +136,7 @@
             this.version_label.Name = "version_label";
             this.version_label.Size = new System.Drawing.Size(140, 23);
             this.version_label.TabIndex = 9;
-            this.version_label.Text = "Версия: 1.0.0.0 ";
+            this.version_label.Text = "Версия: 1.1.0.1 ";
             // 
             // richTextBox1
             // 
