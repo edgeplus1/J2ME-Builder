@@ -43,8 +43,8 @@
             this.menuItem1 = new System.Windows.Forms.MenuItem();
             this.menuItem2 = new System.Windows.Forms.MenuItem();
             this.menuItem3 = new System.Windows.Forms.MenuItem();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.button4 = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -60,7 +60,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(551, 145);
+            this.button1.Location = new System.Drawing.Point(550, 138);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(139, 23);
             this.button1.TabIndex = 1;
@@ -70,7 +70,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(551, 174);
+            this.button2.Location = new System.Drawing.Point(550, 167);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(139, 23);
             this.button2.TabIndex = 2;
@@ -80,7 +80,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(551, 203);
+            this.button3.Location = new System.Drawing.Point(550, 196);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(139, 23);
             this.button3.TabIndex = 3;
@@ -90,7 +90,7 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(551, 232);
+            this.button5.Location = new System.Drawing.Point(550, 225);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(139, 23);
             this.button5.TabIndex = 5;
@@ -105,7 +105,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(83, 26);
             this.label2.TabIndex = 6;
-            this.label2.Text = "Версия 1.1.0.0 \r\n\r\n";
+            this.label2.Text = "Версия 1.1.0.2 \r\n\r\n";
             this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // listBox1
@@ -113,12 +113,12 @@
             this.listBox1.FormattingEnabled = true;
             this.listBox1.Location = new System.Drawing.Point(17, 102);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(528, 199);
+            this.listBox1.Size = new System.Drawing.Size(528, 186);
             this.listBox1.TabIndex = 7;
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(551, 261);
+            this.button6.Location = new System.Drawing.Point(550, 254);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(139, 22);
             this.button6.TabIndex = 8;
@@ -151,19 +151,9 @@
             this.menuItem3.Text = "Поддержка проекта";
             this.menuItem3.Visible = false;
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::J2MEBuilder.Properties.Resources.J2MEBuilder;
-            this.pictureBox1.Location = new System.Drawing.Point(17, 23);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(72, 73);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 9;
-            this.pictureBox1.TabStop = false;
-            // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(551, 116);
+            this.button4.Location = new System.Drawing.Point(550, 109);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(139, 23);
             this.button4.TabIndex = 10;
@@ -171,11 +161,21 @@
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::J2MEBuilder.Properties.Resources.icon_j2mebuilder;
+            this.pictureBox1.Location = new System.Drawing.Point(17, 23);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(72, 73);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 9;
+            this.pictureBox1.TabStop = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(701, 317);
+            this.ClientSize = new System.Drawing.Size(701, 298);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.button6);
@@ -192,6 +192,7 @@
             this.Menu = this.mainMenu1;
             this.Name = "Form1";
             this.Text = "J2ME_Builder";
+            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

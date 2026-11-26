@@ -39,7 +39,6 @@
             this.button3 = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.label6 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
@@ -51,15 +50,16 @@
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.textBoxJdkPath = new System.Windows.Forms.TextBox();
             this.button5 = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.textBoxJdkPath = new System.Windows.Forms.TextBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.groupBox7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -141,16 +141,6 @@
             this.richTextBox1.Size = new System.Drawing.Size(376, 337);
             this.richTextBox1.TabIndex = 12;
             this.richTextBox1.Text = "";
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pictureBox1.Location = new System.Drawing.Point(253, 16);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(98, 72);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 13;
-            this.pictureBox1.TabStop = false;
             // 
             // openFileDialog1
             // 
@@ -260,14 +250,6 @@
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Выбор JDK";
             // 
-            // textBoxJdkPath
-            // 
-            this.textBoxJdkPath.Location = new System.Drawing.Point(9, 19);
-            this.textBoxJdkPath.Name = "textBoxJdkPath";
-            this.textBoxJdkPath.ReadOnly = true;
-            this.textBoxJdkPath.Size = new System.Drawing.Size(238, 20);
-            this.textBoxJdkPath.TabIndex = 0;
-            // 
             // button5
             // 
             this.button5.Location = new System.Drawing.Point(254, 15);
@@ -277,6 +259,24 @@
             this.button5.Text = "Выбрать";
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.buttonBrowseJdk_Click);
+            // 
+            // textBoxJdkPath
+            // 
+            this.textBoxJdkPath.Location = new System.Drawing.Point(9, 19);
+            this.textBoxJdkPath.Name = "textBoxJdkPath";
+            this.textBoxJdkPath.ReadOnly = true;
+            this.textBoxJdkPath.Size = new System.Drawing.Size(238, 20);
+            this.textBoxJdkPath.TabIndex = 0;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pictureBox1.Location = new System.Drawing.Point(253, 16);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(98, 72);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 13;
+            this.pictureBox1.TabStop = false;
             // 
             // Form2
             // 
@@ -295,7 +295,6 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form2";
             this.Text = "Сборка проекта";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
@@ -307,6 +306,7 @@
             this.groupBox6.PerformLayout();
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

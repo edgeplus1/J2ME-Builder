@@ -42,20 +42,22 @@
             this.button4 = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.labelMB = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.labelpercent = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.flowLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI Semibold", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(165, 9);
+            this.label1.Font = new System.Drawing.Font("Arial Rounded MT Bold", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(165, 16);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(241, 50);
+            this.label1.Size = new System.Drawing.Size(257, 43);
             this.label1.TabIndex = 0;
             this.label1.Text = "J2ME Builder";
             // 
@@ -74,21 +76,21 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(3, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(555, 195);
+            this.label3.Size = new System.Drawing.Size(592, 195);
             this.label3.TabIndex = 3;
             this.label3.Text = resources.GetString("label3.Text");
             // 
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.Controls.Add(this.label3);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(10, 195);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(12, 188);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(565, 206);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(598, 206);
             this.flowLayoutPanel1.TabIndex = 4;
             // 
             // buttonInstallUpdate
             // 
-            this.buttonInstallUpdate.Location = new System.Drawing.Point(10, 150);
+            this.buttonInstallUpdate.Location = new System.Drawing.Point(11, 145);
             this.buttonInstallUpdate.Name = "buttonInstallUpdate";
             this.buttonInstallUpdate.Size = new System.Drawing.Size(208, 32);
             this.buttonInstallUpdate.TabIndex = 5;
@@ -99,9 +101,9 @@
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(7, 412);
+            this.linkLabel1.Location = new System.Drawing.Point(15, 397);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(254, 13);
+            this.linkLabel1.Size = new System.Drawing.Size(267, 13);
             this.linkLabel1.TabIndex = 6;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "Советуем посетить документацию от nikita36078";
@@ -110,9 +112,9 @@
             // button2
             // 
             this.button2.Enabled = false;
-            this.button2.Location = new System.Drawing.Point(224, 150);
+            this.button2.Location = new System.Drawing.Point(225, 145);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(119, 32);
+            this.button2.Size = new System.Drawing.Size(291, 32);
             this.button2.TabIndex = 7;
             this.button2.Text = "Обновить";
             this.button2.UseVisualStyleBackColor = true;
@@ -120,7 +122,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(349, 150);
+            this.button3.Location = new System.Drawing.Point(522, 145);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(226, 32);
             this.button3.TabIndex = 8;
@@ -136,19 +138,19 @@
             this.version_label.Name = "version_label";
             this.version_label.Size = new System.Drawing.Size(140, 23);
             this.version_label.TabIndex = 9;
-            this.version_label.Text = "Версия: 1.1.0.1 ";
+            this.version_label.Text = "Версия: 1.1.0.2 ";
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(10, 435);
+            this.richTextBox1.Location = new System.Drawing.Point(6, 416);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(563, 131);
+            this.richTextBox1.Size = new System.Drawing.Size(741, 159);
             this.richTextBox1.TabIndex = 10;
             this.richTextBox1.Text = resources.GetString("richTextBox1.Text");
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(6, 572);
+            this.button4.Location = new System.Drawing.Point(188, 581);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(287, 32);
             this.button4.TabIndex = 11;
@@ -160,7 +162,7 @@
             // 
             this.progressBar1.Location = new System.Drawing.Point(174, 109);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(386, 10);
+            this.progressBar1.Size = new System.Drawing.Size(573, 10);
             this.progressBar1.TabIndex = 12;
             // 
             // labelMB
@@ -172,16 +174,6 @@
             this.labelMB.Size = new System.Drawing.Size(0, 16);
             this.labelMB.TabIndex = 13;
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::J2MEBuilder.Properties.Resources.J2MEBuilder;
-            this.pictureBox1.Location = new System.Drawing.Point(10, 9);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(149, 129);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 2;
-            this.pictureBox1.TabStop = false;
-            // 
             // labelpercent
             // 
             this.labelpercent.AutoSize = true;
@@ -192,7 +184,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(299, 572);
+            this.button1.Location = new System.Drawing.Point(481, 581);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(276, 32);
             this.button1.TabIndex = 16;
@@ -200,11 +192,32 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = global::J2MEBuilder.Properties.Resources._5968282;
+            this.pictureBox2.Location = new System.Drawing.Point(623, 240);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(134, 118);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox2.TabIndex = 17;
+            this.pictureBox2.TabStop = false;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::J2MEBuilder.Properties.Resources.icon_j2mebuilder;
+            this.pictureBox1.Location = new System.Drawing.Point(10, 9);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(149, 129);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 2;
+            this.pictureBox1.TabStop = false;
+            // 
             // Form4
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(584, 610);
+            this.ClientSize = new System.Drawing.Size(769, 618);
+            this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.labelpercent);
@@ -220,12 +233,16 @@
             this.Controls.Add(this.label_information);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.progressBar1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Form4";
             this.Text = "J2ME - О программе";
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -250,5 +267,6 @@
         private System.Windows.Forms.Label labelMB;
         private System.Windows.Forms.Label labelpercent;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.PictureBox pictureBox2;
     }
 }

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.Win32; // Добавлено для проверки реестра Wine
 
 namespace J2MEBuilder
 {
@@ -30,43 +31,97 @@ namespace J2MEBuilder
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            // 1. Проверяем среду выполнения (Linux / Wine)
+            CheckOSCompatibility();
+
+            // 2. Загружаем данные и обновляем интерфейс
             LoadRecentProjects();
-            CleanupInvalidProjects(); // Очищаем невалидные проекты при запуске
+            CleanupInvalidProjects(); // Умная очистка невалидных проектов при запуске
             UpdateListBox();
         }
 
         /// <summary>
-        /// Автоматически удаляет из списка проекты, которые больше не существуют 
-        /// или не являются валидными J2ME проектами (включая C:\).
+        /// Проверяет среду выполнения на предмет Linux или Wine 
+        /// и выводит предупреждение, если приложение запущено не в нативной Windows.
+        /// </summary>
+        private void CheckOSCompatibility()
+        {
+            bool isNativeLinux = Environment.OSVersion.Platform == PlatformID.Unix;
+            bool isWine = false;
+
+            try
+            {
+                // Wine при запуске создает специфичный ключ в реестре
+                using (RegistryKey wineKey = Registry.CurrentUser.OpenSubKey(@"Software\Wine"))
+                {
+                    isWine = (wineKey != null);
+                }
+            }
+            catch
+            {
+                // Игнорируем возможные ошибки доступа к реестру
+            }
+
+            if (isNativeLinux || isWine)
+            {
+                string warningMessage = "Данная версия не предназначена для работы на ядре Linux, " +
+                                        "поэтому мы не гарантируем что все будет работать также как на Windows, " +
+                                        "однако разработка под linux все же идет, ждите обновлений " +
+                                        "на репозиторий GitHub или Edge+ App Platforms." +
+                                        "GitHub: github.com/edgeplus1/J2ME-Builder" +
+                                        "EAP: store.edgeplus.ru" ;
+
+                MessageBox.Show(
+                    warningMessage,
+                    "Предупреждение о совместимости",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+            }
+        }
+
+        /// <summary>
+        /// Умная очистка невалидных проектов.
+        /// Удаляет проекты, которые были физически удалены с диска, 
+        /// но сохраняет в истории проекты на отключенных внешних носителях.
         /// </summary>
         private void CleanupInvalidProjects()
         {
             var validProjects = new List<string>();
-            bool changed = false;
+            int removedCount = 0;
 
             foreach (var path in recentProjects)
             {
+                // 1. Если папка существует и это валидный J2ME проект — оставляем
                 if (Directory.Exists(path) && IsJ2MEProject(path))
                 {
                     validProjects.Add(path);
+                    continue;
+                }
+
+                // 2. Если папки нет, проверяем, доступен ли сам логический диск (C:\, D:\, E:\ и т.д.)
+                string root = Path.GetPathRoot(path);
+                bool isDriveMounted = !string.IsNullOrEmpty(root) && Directory.Exists(root);
+
+                if (isDriveMounted)
+                {
+                    // Диск подключен, но папки проекта на нем нет. Удаляем из истории.
+                    removedCount++;
                 }
                 else
                 {
-                    changed = true; // Были удалены невалидные записи
+                    // Диск не найден (например, флешка не вставлена).
+                    // Сохраняем в истории, чтобы проект появился при подключении носителя.
+                    validProjects.Add(path);
                 }
             }
 
-            if (changed)
+            if (removedCount > 0)
             {
                 recentProjects = validProjects;
                 SaveRecentProjects();
+                Debug.WriteLine($"[J2MEBuilder] Очистка: удалено {removedCount} недействительных проектов из истории.");
             }
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            Form2 builder = new Form2();
-            builder.ShowDialog();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -79,6 +134,12 @@ namespace J2MEBuilder
                     AddToRecentProjects(createProject.CreatedProjectPath);
                 }
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Form2 builder = new Form2();
+            builder.ShowDialog();
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -110,6 +171,17 @@ namespace J2MEBuilder
                     OpenProjectInVSCode(projectPath);
                 }
             }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Form5 downloading = new Form5();
+            downloading.ShowDialog();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
 
         private void button6_Click(object sender, EventArgs e)
@@ -189,6 +261,17 @@ namespace J2MEBuilder
             }
         }
 
+        private void menuItem2_Click(object sender, EventArgs e)
+        {
+            Form4 aboutForm = new Form4();
+            aboutForm.ShowDialog();
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+            // Пустой обработчик, оставлен для совместимости с дизайнером форм
+        }
+
         /// <summary>
         /// Извлекает путь из строки listBox1 (формат: "ProjectName - C:\path")
         /// </summary>
@@ -204,7 +287,7 @@ namespace J2MEBuilder
 
         /// <summary>
         /// БЕЗОПАСНАЯ проверка на J2ME проект. 
-        /// Больше не вызывает ошибок доступа к системным папкам.
+        /// Не вызывает ошибок доступа к системным папкам и корням дисков.
         /// </summary>
         private bool IsJ2MEProject(string path)
         {
@@ -239,7 +322,7 @@ namespace J2MEBuilder
                     }
                 }
 
-                // Если в src не нашли, ищем в корне выбранной папки (но только верхний уровень, чтобы не сканировать весь диск)
+                // Если в src не нашли, ищем в корне выбранной папки (только верхний уровень)
                 if (!hasJavaFiles)
                 {
                     try
@@ -272,6 +355,7 @@ namespace J2MEBuilder
 
         private void OpenProjectInVSCode(string projectPath)
         {
+            // Попытка открыть через системную команду 'code'
             try
             {
                 var psi = new ProcessStartInfo("code", $"\"{projectPath}\"")
@@ -284,6 +368,7 @@ namespace J2MEBuilder
             }
             catch { }
 
+            // Попытка найти VS Code по стандартным путям установки
             string[] vsPaths = {
                 Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                     "Programs", "Microsoft VS Code", "Code.exe"),
@@ -299,6 +384,7 @@ namespace J2MEBuilder
                 }
             }
 
+            // Если не найден, предлагаем скачать
             var result = MessageBox.Show(
                 "Visual Studio Code не найден в системе.\n\n" +
                 "Открыть страницу загрузки?",
@@ -387,27 +473,5 @@ namespace J2MEBuilder
         }
 
         #endregion
-
-        private void menuItem2_Click(object sender, EventArgs e)
-        {
-            Form4 aboutForm = new Form4();
-            aboutForm.ShowDialog();
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            Form5 downloading = new Form5();
-            downloading.ShowDialog();
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-            // Пустой обработчик, оставлен для совместимости с дизайнером форм
-        }
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
     }
 }
