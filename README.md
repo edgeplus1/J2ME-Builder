@@ -1,8 +1,9 @@
-<img width="200" height="200" alt="J2MEBuilder" src="https://github.com/user-attachments/assets/76c9d943-83dc-4835-b716-5b9011059aeb" />
+<img width="200" height="200" alt="icon_j2mebuilder" src="https://github.com/user-attachments/assets/b1978a49-8a4f-469f-930d-6b9ee5987fc0" />
+
 
 # J2ME Builder
 
-> **Релиз исходного кода** | Версия: 1.0.0.0 | Лицензия: MIT  
+> **Релиз исходного кода** | Версия: 1.1.0.2 | Лицензия: MIT  
 > **ВАЖНО:** Требуется строго **Java JDK 1.8.0** (другие версии не поддерживаются)
 > 
 > **ВНИМАНИЕ:** Документация на обновлений с изменением исходного кода
